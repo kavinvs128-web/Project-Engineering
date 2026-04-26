@@ -1,15 +1,11 @@
--- Drop tables in order of dependencies
+-- Drop tables in correct dependency order
 DROP TABLE IF EXISTS payments CASCADE;
-
 DROP TABLE IF EXISTS order_items CASCADE;
-
 DROP TABLE IF EXISTS orders CASCADE;
-
 DROP TABLE IF EXISTS products CASCADE;
-
 DROP TABLE IF EXISTS customers CASCADE;
 
--- Customer records
+-- Customers
 CREATE TABLE customers (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -17,7 +13,7 @@ CREATE TABLE customers (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Employees table for performance testing
+-- Employees (for indexing test)
 CREATE TABLE employees (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -25,44 +21,66 @@ CREATE TABLE employees (
     salary DECIMAL(10, 2) NOT NULL
 );
 
--- Correct composite index (right order: department first for equality, then salary for range)
-CREATE INDEX idx_employees_correct ON employees (department, salary);
+-- Composite index (performance)
+CREATE INDEX idx_employees_department_salary 
+ON employees (department, salary);
 
--- BUG 1: Missing Foreign Key (Orphaned Records)
--- The customer_id column should have a REFERENCES customers(id) constraint, but it's missed here.
+-- Orders
 CREATE TABLE orders (
     id SERIAL PRIMARY KEY,
-    customer_id INTEGER REFERENCES customers (id), -- FIXED: Added foreign key
+    customer_id INTEGER NOT NULL,
     status VARCHAR(20) DEFAULT 'pending',
     total DECIMAL(10, 2) DEFAULT 0.00,
-    created_at TIMESTAMPTZ DEFAULT NOW()
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+
+    CONSTRAINT fk_orders_customer 
+    FOREIGN KEY (customer_id) REFERENCES customers(id),
+
+    CONSTRAINT chk_orders_status 
+    CHECK (status IN ('pending','completed','cancelled'))
 );
 
--- BUG 2: Missing CHECK Constraint (Invalid Data)
--- The inventory_count column should have a CHECK(inventory_count >= 0) constraint.
+-- Products
 CREATE TABLE products (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     sku VARCHAR(50) NOT NULL UNIQUE,
-    inventory_count INTEGER DEFAULT 0 CHECK (inventory_count >= 0), -- FIXED: Added check constraint
-    price DECIMAL(10, 2) NOT NULL
+    inventory_count INTEGER DEFAULT 0,
+    price DECIMAL(10, 2) NOT NULL,
+
+    CONSTRAINT chk_inventory_non_negative 
+    CHECK (inventory_count >= 0)
 );
 
--- Order Items table
+-- Order Items
 CREATE TABLE order_items (
     id SERIAL PRIMARY KEY,
-    order_id INTEGER NOT NULL REFERENCES orders (id),
-    product_id INTEGER NOT NULL REFERENCES products (id),
+    order_id INTEGER NOT NULL,
+    product_id INTEGER NOT NULL,
     quantity INTEGER NOT NULL,
-    unit_price DECIMAL(10, 2) NOT NULL
+    unit_price DECIMAL(10, 2) NOT NULL,
+
+    CONSTRAINT fk_order_items_order 
+    FOREIGN KEY (order_id) REFERENCES orders(id),
+
+    CONSTRAINT fk_order_items_product 
+    FOREIGN KEY (product_id) REFERENCES products(id)
 );
 
--- BUG 3: Missing UNIQUE Constraint (Duplicate Key Problem)
--- The order_id column should have a UNIQUE constraint to ensure only one payment record per order.
+-- Payments
 CREATE TABLE payments (
     id SERIAL PRIMARY KEY,
-    order_id INTEGER NOT NULL UNIQUE, -- FIXED: Added unique constraint
+    order_id INTEGER NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
-    status VARCHAR(20) DEFAULT 'pending', -- Can be 'pending' or 'completed'
-    created_at TIMESTAMPTZ DEFAULT NOW()
+    status VARCHAR(20) DEFAULT 'pending',
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+
+    CONSTRAINT unique_payment_per_order 
+    UNIQUE (order_id),
+
+    CONSTRAINT chk_payment_status 
+    CHECK (status IN ('pending','completed','failed')),
+
+    CONSTRAINT fk_payments_order 
+    FOREIGN KEY (order_id) REFERENCES orders(id)
 );
