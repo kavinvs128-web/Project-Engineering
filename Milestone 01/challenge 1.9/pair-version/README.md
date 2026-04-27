@@ -1,12 +1,20 @@
-# Pair Version
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+</div>
 
-This folder contains the task manager app built using an AI pair programming assistant.
+# Run and deploy your AI Studio app
 
-**Tool used:** [replace with your tool — GitHub Copilot / Cursor]
-**Time to build:** [replace with your time]
-**Suggestions accepted:** [approximate number]
-**Suggestions rejected:** [approximate number]
-**Live URL:** [replace with your deployment URL]
+This contains everything you need to run your app locally.
 
-## Notes
-[Any observations about how the AI assisted, where you overrode it, where it helped most]
+View your app in AI Studio: https://ai.studio/apps/1912202f-d7c9-40ff-a598-d99e986e7b43
+
+## Run Locally
+
+**Prerequisites:**  Node.js
+
+
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`
