@@ -1,0 +1,13 @@
+.App {
+  padding: 50px;
+}
+input {
+  display: block;
+  margin: 10px;
+}
+button {
+  background-color: blue;
+  color: white;
+  padding: 10px;
+}
+/* This CSS is super basic and unstyled */

@@ -1,0 +1,58 @@
+// prisma/schema.prisma
+// QuickSeat — Flash Sale Seat Booking
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  createdAt DateTime  @default(now())
+
+  bookings  Booking[]
+}
+
+model Show {
+  id        Int       @id @default(autoincrement())
+  name      String
+  venue     String
+  date      DateTime
+  createdAt DateTime  @default(now())
+
+  seats     Seat[]
+  bookings  Booking[]
+}
+
+model Seat {
+  id        Int       @id @default(autoincrement())
+  number    String
+  showId    Int
+  show      Show      @relation(fields: [showId], references: [id])
+
+  bookings  Booking[]
+}
+
+model Booking {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  seatId    Int
+  showId    Int
+
+  user      User     @relation(fields: [userId], references: [id])
+  seat      Seat     @relation(fields: [seatId], references: [id])
+  show      Show     @relation(fields: [showId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  // ❌ FLAW 2: No @@unique constraint here.
+  // Two concurrent inserts for the same (seatId, showId) will both succeed.
+  // The database has no way to reject the second one.
+  // Add @@unique([seatId, showId]) to fix this.
+}

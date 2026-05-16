@@ -1,0 +1,17 @@
+{
+  "name": "good-prompt-bad-prompt",
+  "version": "1.0.0",
+  "description": "LearnLens — a student tools platform prompt engineering challenge",
+  "main": "backend/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node backend/index.js",
+    "test:runner": "node runner.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "node-fetch": "^3.3.2"
+  }
+}

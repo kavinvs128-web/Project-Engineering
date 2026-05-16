@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            Int       @id @default(autoincrement())
+  email         String    @unique
+  name          String
+  password_hash String    // Flaw 9: Sensitive field exposed later
+  createdAt     DateTime  @default(now())
+  groups        Group[]   @relation("GroupMembers")
+  createdGroups Group[]   @relation("CreatedGroups")
+  notes         Note[]
+}
+
+model Group {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  createdAt   DateTime @default(now())
+  creatorId   Int
+  creator     User     @relation("CreatedGroups", fields: [creatorId], references: [id])
+  members     User[]   @relation("GroupMembers")
+  notes       Note[]
+}
+
+model Note {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  fileUrl   String?  // Simulated URL for challenge
+  authorId  Int
+  author    User     @relation(fields: [authorId], references: [id])
+  groupId   Int
+  group     Group    @relation(fields: [groupId], references: [id])
+  createdAt DateTime @default(now())
+}

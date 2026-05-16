@@ -1,0 +1,22 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Roommate {
+  id       Int       @id @default(autoincrement())
+  name     String
+  expenses Expense[]
+}
+
+model Expense {
+  id          Int      @id @default(autoincrement())
+  description String
+  amount      Float
+  payerId     Int
+  payer       Roommate @relation(fields: [payerId], references: [id])
+  createdAt   DateTime @default(now())
+}

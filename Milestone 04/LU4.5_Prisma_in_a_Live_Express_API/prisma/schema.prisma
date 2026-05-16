@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  orders    Order[]
+  createdAt DateTime @default(now())
+}
+
+model Product {
+  id     Int     @id @default(autoincrement())
+  name   String
+  price  Float
+  // 🚨 TASK 02 — stock field is intentionally missing.
+  // Add it here before running the migration.
+  orders Order[]
+}
+
+model Order {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId Int
+  quantity  Int      @default(1)
+  user      User     @relation(fields: [userId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+}

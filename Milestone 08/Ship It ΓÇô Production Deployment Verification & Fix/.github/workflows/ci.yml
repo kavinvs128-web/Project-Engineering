@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - uses: actions/setup-node@v3
+        with: 
+          node-version: '20'
+          
+      - run: cd backend && npm ci
+      - run: cd backend && npm run lint
+      - run: cd backend && npm test
+      
+      - run: cd frontend && npm ci
+      - run: cd frontend && npm run build

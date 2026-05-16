@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Task {
+  id        Int      @id @default(autoincrement())
+  title     String
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Score {
+  id        Int      @id @default(autoincrement())
+  value     Int      @default(0)
+  updatedAt DateTime @updatedAt
+}

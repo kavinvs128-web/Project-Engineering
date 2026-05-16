@@ -1,0 +1,17 @@
+# render.yaml — Render Blueprint for NoteVault
+# BUG: DATABASE_URL and JWT_SECRET are NOT listed as environment variables.
+# This means the service will deploy without the critical config it needs.
+
+services:
+  - type: web
+    name: notevault-api
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: npm install && npx prisma generate
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # DATABASE_URL is missing here!
+      # JWT_SECRET is missing here!

@@ -1,0 +1,7 @@
+Photosynthesis is the foundational process by which green plants and some other organisms transform light energy into chemical energy. During this process, light energy is captured and used to convert water, carbon dioxide, and minerals into oxygen and energy-rich organic compounds. 
+
+The entire process is generally broken down into two main stages: the light-dependent reactions and the Calvin cycle (or light-independent reactions).
+
+In the light-dependent reactions, which take place in the thylakoid membrane of the chloroplast, light energy is absorbed by the pigment chlorophyll. This energy is then used to split water molecules, releasing oxygen as a byproduct. More importantly, this stage generates the energy-carrier molecules ATP (adenosine triphosphate) and NADPH. These are essential for powering the next stage of the process.
+
+The Calvin cycle occurs in the stroma of the chloroplast. Here, the ATP and NADPH produced earlier provide the energy required to fix carbon dioxide from the atmosphere into a solid form. Through a series of intricate enzyme-driven steps, this carbon is ultimately converted into glucose. Glucose synthesis is the central goal, as it provides the simple carbohydrate that plants use for energy and growth, forming the base of the food web for nearly all life on Earth.

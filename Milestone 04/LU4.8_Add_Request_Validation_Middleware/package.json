@@ -1,0 +1,18 @@
+{
+    "name": "lu-3-8-validation-middleware",
+    "version": "1.0.0",
+    "description": "API Request Validation Firewall",
+    "main": "src/server.js",
+    "scripts": {
+      "dev": "nodemon src/server.js",
+      "start": "node src/server.js"
+    },
+    "dependencies": {
+      "express": "^4.18.2",
+      "joi": "^17.12.0",
+      "zod": "^3.22.4"
+    },
+    "devDependencies": {
+      "nodemon": "^3.0.3"
+    }
+  }

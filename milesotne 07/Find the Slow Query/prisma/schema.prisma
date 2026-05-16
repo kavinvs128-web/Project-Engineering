@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  category    String           // intentional: no @index here — this is the bottleneck for Endpoint 1
+  price       Float
+  description String   @db.Text  // large text field
+  imageUrl    String?
+  metadata    Json?             // JSON blob
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  orderItems  OrderItem[]
+}
+
+model User {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  name      String
+  bio       String?    @db.Text   // large text field for SELECT * problem
+  avatar    String?
+  settings  Json?                 // JSON blob adds to row width
+  createdAt DateTime   @default(now())
+  orders    Order[]
+  activities Activity[]
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  userId      String                 // intentional: no @index here — this is the bottleneck for JOIN/filter
+  total       Float
+  status      String
+  createdAt   DateTime    @default(now())
+  user        User        @relation(fields: [userId], references: [id])
+  items       OrderItem[]
+}
+
+model Activity {
+  id        String   @id @default(cuid())
+  userId    String                // intentional: no @index here — this is the bottleneck for Endpoint 3
+  type      String
+  data      Json?
+  metadata  String?  @db.Text  // large text field adds to row width
+  notes     String?  @db.Text  // another large text field
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  productId String
+  quantity  Int
+  price     Float
+  order     Order   @relation(fields: [orderId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+}

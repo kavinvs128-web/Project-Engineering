@@ -1,0 +1,20 @@
+{
+  "name": "focusforge-server",
+  "version": "1.0.0",
+  "description": "Backend for FocusForge Productivity App",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "cors": "^2.8.6",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "prisma": "^7.4.2"
+  }
+}

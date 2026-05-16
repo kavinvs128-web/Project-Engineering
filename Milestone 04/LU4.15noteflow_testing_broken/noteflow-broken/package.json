@@ -1,0 +1,22 @@
+{
+  "name": "noteflow-testing-broken",
+  "version": "1.0.0",
+  "description": "NoteFlow API — broken starter for the API testing challenge",
+  "main": "src/app.js",
+  "scripts": {
+    "dev": "nodemon src/app.js",
+    "start": "node src/app.js",
+    "test": "jest --runInBand --forceExit"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.7.0",
+    "express": "^4.18.2",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.4",
+    "nodemon": "^3.0.2",
+    "prisma": "^5.7.0"
+  }
+}

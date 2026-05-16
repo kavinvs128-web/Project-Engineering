@@ -1,0 +1,107 @@
+:root {
+  --primary-color: #2563eb;
+  --bg-color: #f8fafc;
+  --text-color: #1e293b;
+  --sidebar-width: 250px;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.dashboard {
+  width: 900px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+header {
+  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 20px;
+}
+
+.main-content {
+  display: flex;
+  gap: 30px;
+}
+
+.task-section {
+  flex: 1;
+}
+
+.sidebar {
+  width: var(--sidebar-width);
+}
+
+.add-task-form {
+  margin-bottom: 20px;
+}
+
+.add-task-form input {
+  padding: 10px;
+  width: 250px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+}
+
+.add-task-form button {
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.task-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.task-list li {
+  padding: 10px;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.task-list li.completed span {
+  text-decoration: line-through;
+  color: #94a3b8;
+}
+
+/* Redesign candidate styles */
+.motivation-widget {
+  background-color: #fffbeb;
+  padding: 15px;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  text-align: center;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.motivation-widget h3 {
+  margin-top: 0;
+  font-size: 1rem;
+  color: #d97706;
+}
+
+.motivation-widget p {
+  font-style: italic;
+  font-size: 0.9rem;
+  color: #92400e;
+}

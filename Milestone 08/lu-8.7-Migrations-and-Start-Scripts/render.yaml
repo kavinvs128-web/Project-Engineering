@@ -1,0 +1,41 @@
+# render.yaml — Render Blueprint for DevLog
+
+services:
+  - type: web
+    name: devlog-api
+    runtime: node
+    region: oregon
+    plan: free
+    # ================================================================
+    # BUG #1: Build command runs `prisma generate` but is MISSING
+    # `prisma migrate deploy`. This means the Prisma Client is
+    # generated (code works), but the DATABASE TABLES don't exist.
+    # The first query will crash with:
+    #   "The table 'User' does not exist in the current database."
+    #
+    # The developer ran `prisma migrate dev` on their local machine,
+    # which created the tables locally. But in production, migrations
+    # must be explicitly deployed with `prisma migrate deploy`.
+    # ================================================================
+    buildCommand: npm install && npx prisma generate
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # ================================================================
+      # BUG #3: DATABASE_URL uses the EXTERNAL connection string.
+      # External URLs are meant for connecting from outside Render's
+      # network (e.g., from your local machine). They have:
+      #   - Higher latency (goes through public internet)
+      #   - Connection limits (5 concurrent connections on free tier)
+      #   - SSL required
+      #
+      # In production, you should use the INTERNAL connection string,
+      # which is faster and has no connection limits within Render.
+      # ================================================================
+      - key: DATABASE_URL
+        value: "postgresql://devlog_user:abc123xyz@dpg-abc123xyz-a.oregon-postgres.render.com:5432/devlog_db"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGIN
+        value: https://devlog-frontend.onrender.com

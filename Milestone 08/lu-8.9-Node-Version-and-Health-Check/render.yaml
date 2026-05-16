@@ -1,0 +1,27 @@
+# render.yaml — Render Blueprint for WeatherDash
+
+services:
+  - type: web
+    name: weatherdash-api
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    # ================================================================
+    # BUG #4: Missing healthCheckPath
+    # Render doesn't know how to check if the app started successfully.
+    # Without this, Render assumes the port binding is enough, but
+    # proper services should explicitly define a health check endpoint.
+    # ================================================================
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # ================================================================
+      # BUG #2: Missing NODE_VERSION
+      # Render defaults to an older Node version (like 14 or 18).
+      # This app uses `.toSorted()`, which was introduced in Node 20.
+      # The app will crash internally without logging an obvious
+      # "Node version mismatch" error — it just says:
+      # TypeError: data.toSorted is not a function
+      # ================================================================

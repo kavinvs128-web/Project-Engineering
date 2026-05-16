@@ -1,0 +1,18 @@
+{
+    "name": "lu-3.6-error-handler-student",
+    "version": "1.0.0",
+    "description": "Starter code for building a centralized error handler",
+    "main": "src/app.js",
+    "scripts": {
+      "dev": "nodemon src/app.js",
+      "start": "node src/app.js"
+    },
+    "dependencies": {
+      "@prisma/client": "^5.10.0",
+      "express": "^4.18.2"
+    },
+    "devDependencies": {
+      "nodemon": "^3.1.0",
+      "prisma": "^5.10.0"
+    }
+  }

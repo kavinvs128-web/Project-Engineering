@@ -1,0 +1,9 @@
+// src/middleware/
+//
+// This folder is where your middleware lives.
+//
+// Your task: create rateLimiter.js in this folder.
+// It should export a bookingLimiter using express-rate-limit
+// and apply it to the POST /book route in src/routes/bookings.js.
+//
+// This file is a placeholder — delete it once you create rateLimiter.js.

@@ -1,0 +1,329 @@
+:root {
+  --matrix-green: #00ff41;
+  --matrix-vibrant: #adff2f;
+  --matrix-dark: #003b00;
+  --matrix-bg: #030803;
+  --matrix-card: rgba(0, 59, 0, 0.1);
+  --matrix-border: #008f11;
+  --text-main: #d1ffd1;
+  --text-dim: #008f11;
+  --danger: #ff3131;
+  --shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+  --font-mono: 'Share Tech Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-mono);
+  background-color: var(--matrix-bg);
+  background-image: 
+    linear-gradient(rgba(0, 255, 65, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px);
+  background-size: 30px 30px;
+  color: var(--text-main);
+  line-height: 1.5;
+  min-height: 100vh;
+  padding: 2rem;
+  overflow-x: hidden;
+}
+
+/* Subtle Scanline Effect */
+body::before {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+  z-index: 9999;
+  pointer-events: none;
+  background-size: 100% 4px, 3px 100%;
+}
+
+#root {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.header {
+  margin-bottom: 3rem;
+  text-align: center;
+  border-bottom: 2px solid var(--matrix-border);
+  padding-bottom: 1rem;
+  box-shadow: 0 10px 10px -10px var(--matrix-green);
+}
+
+.header h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--matrix-green);
+  text-transform: uppercase;
+  letter-spacing: 0.5rem;
+  text-shadow: 0 0 10px var(--matrix-green), 0 0 20px var(--matrix-green);
+  animation: flicker 4s infinite;
+}
+
+@keyframes flicker {
+  0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% { opacity: 1; }
+  20%, 21.999%, 63%, 63.999%, 65%, 69.999% { opacity: 0.4; }
+}
+
+.header p {
+  color: var(--matrix-vibrant);
+  font-size: 1.1rem;
+  letter-spacing: 0.1rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 2.5rem;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel {
+  background: var(--matrix-card);
+  backdrop-filter: blur(5px);
+  border-radius: 4px;
+  padding: 1.5rem;
+  border: 1px solid var(--matrix-border);
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--matrix-green);
+  box-shadow: 0 0 10px var(--matrix-green);
+}
+
+.panel-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--matrix-green);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--matrix-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--matrix-border);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--matrix-green);
+}
+
+/* Cart Item List */
+.item-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.item-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+  background: rgba(0, 59, 0, 0.2);
+  border: 1px solid rgba(0, 143, 17, 0.3);
+  transition: all 0.3s ease;
+}
+
+.item-card:hover {
+  background: rgba(0, 59, 0, 0.4);
+  border-color: var(--matrix-green);
+  transform: scale(1.02);
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.1);
+}
+
+.item-info h4 {
+  font-size: 1.1rem;
+  color: var(--text-main);
+  text-transform: uppercase;
+}
+
+.item-info span {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.item-price {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--matrix-green);
+}
+
+.delete-btn {
+  background: transparent;
+  color: var(--matrix-vibrant);
+  border: 1px solid var(--matrix-border);
+  cursor: pointer;
+  padding: 0.4rem 0.6rem;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.delete-btn:hover {
+  background: var(--danger);
+  color: white;
+  border-color: var(--danger);
+  box-shadow: 0 0 10px var(--danger);
+}
+
+/* Forms */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--matrix-vibrant);
+  text-transform: uppercase;
+}
+
+input, select {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--matrix-bg);
+  border: 1px solid var(--matrix-border);
+  color: var(--matrix-green);
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  outline: none;
+}
+
+input:focus, select:focus {
+  border-color: var(--matrix-green);
+  box-shadow: 0 0 10px var(--matrix-green);
+}
+
+.btn-primary {
+  width: 100%;
+  background: transparent;
+  color: var(--matrix-green);
+  border: 1px solid var(--matrix-green);
+  padding: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+.btn-primary:hover {
+  background: var(--matrix-green);
+  color: var(--matrix-bg);
+  box-shadow: 0 0 20px var(--matrix-green);
+}
+
+/* Payment Panel */
+.total-display {
+  background: rgba(0, 255, 65, 0.05);
+  border: 1px dashed var(--matrix-border);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.total-display .big-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--matrix-green);
+  text-shadow: 0 0 10px var(--matrix-green);
+}
+
+.participant-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: rgba(0, 143, 17, 0.05);
+  border-left: 2px solid var(--matrix-border);
+}
+
+.pay-tag {
+  font-size: 0.8rem;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--matrix-green);
+  color: var(--matrix-green);
+  background: rgba(0, 255, 65, 0.1);
+  text-transform: uppercase;
+}
+
+.pay-btn {
+  background: transparent;
+  border: 1px solid var(--matrix-border);
+  color: var(--matrix-vibrant);
+  padding: 0.5rem 1rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.pay-btn:hover:not(:disabled) {
+  background: var(--matrix-border);
+  color: var(--matrix-bg);
+}
+
+.status-box {
+  margin-top: 2rem;
+  padding: 1.25rem;
+  border: 1px solid var(--matrix-green);
+  font-size: 0.9rem;
+  background: rgba(0, 255, 65, 0.05);
+}
+
+.status-error {
+  border-color: var(--danger);
+  color: var(--danger);
+  box-shadow: inset 0 0 10px rgba(255, 49, 49, 0.1);
+}
+
+.status-success {
+  border-color: var(--matrix-green);
+  color: var(--matrix-green);
+  background: rgba(0, 255, 65, 0.1);
+}
+
+.status-box p {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}

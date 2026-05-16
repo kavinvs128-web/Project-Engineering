@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CredApp | Home</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg: #f8fafc;
+            --text: #1e293b;
+            --white: #ffffff;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 1.5rem;
+            font-size: 1.875rem;
+            font-weight: 700;
+        }
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            margin: 0.5rem;
+        }
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+        .profile-card {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="welcome-box">
+            <h1>Welcome to CredApp</h1>
+            <p>Access your account to view your profile securely.</p>
+            <div style="margin-top: 1.5rem;">
+                <a href="/login.html" class="btn">Login</a>
+                <a href="/signup.html" class="btn">Signup</a>
+            </div>
+        </div>
+        <div id="profile-box" class="profile-card">
+            <h1>Your Profile</h1>
+            <div id="user-info" style="text-align: left; margin-bottom: 1.5rem;">
+                <!-- Profile data will be injected here -->
+            </div>
+            <button onclick="logout()" class="btn" style="border: none; cursor: pointer; width: 100%;">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        const token = localStorage.getItem('token');
+        const welcomeBox = document.getElementById('welcome-box');
+        const profileBox = document.getElementById('profile-box');
+        const userInfo = document.getElementById('user-info');
+
+        if (token) {
+            fetch('/api/auth/profile', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(res => {
+                if (!res.ok) throw new Error();
+                return res.json();
+            })
+            .then(data => {
+                welcomeBox.style.display = 'none';
+                profileBox.style.display = 'block';
+                userInfo.innerHTML = `
+                    <p><strong>Email:</strong> ${data.email}</p>
+                    <p><strong>ID:</strong> ${data._id}</p>
+                    <p><strong>Joined:</strong> ${new Date(data.createdAt).toLocaleDateString()}</p>
+                `;
+            })
+            .catch(() => {
+                localStorage.removeItem('token');
+            });
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.reload();
+        }
+    </script>
+</body>
+</html>

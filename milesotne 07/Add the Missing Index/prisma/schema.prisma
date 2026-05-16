@@ -1,0 +1,73 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  name      String
+  password  String
+  role      String    @default("user")
+  createdAt DateTime  @default(now())
+  tasks     Task[]    @relation("AssignedTasks")
+  projects  ProjectMember[]
+  comments  Comment[]
+}
+
+model Project {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  createdAt   DateTime  @default(now())
+  tasks       Task[]
+  members     ProjectMember[]
+}
+
+model Task {
+  id             Int       @id @default(autoincrement())
+  title          String
+  description    String?
+  status         String    @default("TODO")
+  priority       String    @default("MEDIUM")
+  assignedUserId Int?
+  projectId      Int
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  project        Project   @relation(fields: [projectId], references: [id])
+  assignedUser   User?     @relation("AssignedTasks", fields: [assignedUserId], references: [id])
+  comments       Comment[]
+
+  // ❌ Missing: @@index([assignedUserId, createdAt])
+  // ❌ Missing: @@index([projectId, status])
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  taskId    Int
+  authorId  Int
+  createdAt DateTime @default(now())
+  task      Task     @relation(fields: [taskId], references: [id])
+  author    User     @relation(fields: [authorId], references: [id])
+
+  // ❌ Missing: @@index([taskId, createdAt])
+}
+
+model ProjectMember {
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  projectId Int
+  role      String  @default("member")
+  user      User    @relation(fields: [userId], references: [id])
+  project   Project @relation(fields: [projectId], references: [id])
+
+  @@unique([userId, projectId])
+}

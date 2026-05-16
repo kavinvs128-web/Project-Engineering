@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model Issue {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  status      String   @default("OPEN")
+  createdAt   DateTime @default(now())
+}
+
+model Task {
+  id          Int      @id @default(autoincrement())
+  title       String
+  assignedTo  String
+  status      String   @default("PENDING")
+  createdAt   DateTime @default(now())
+}

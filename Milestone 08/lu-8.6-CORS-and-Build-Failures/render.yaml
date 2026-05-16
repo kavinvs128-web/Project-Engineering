@@ -1,0 +1,50 @@
+# render.yaml — Render Blueprint for LinkShelf
+
+services:
+  # ---- Backend API ----
+  - type: web
+    name: linkshelf-api
+    runtime: node
+    region: oregon
+    plan: free
+    # ================================================================
+    # BUG #3: Build command is missing `npx prisma generate`.
+    # Without it, the Prisma Client is never generated in production.
+    # The server will start fine, the health check will pass, but the
+    # FIRST database query will crash with:
+    #   "PrismaClientInitializationError: Prisma Client has not been generated yet"
+    # ================================================================
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: linkshelf-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      # ================================================================
+      # BUG #2 (partial): CORS_ORIGIN is missing here!
+      # The backend needs to know the frontend URL for CORS.
+      # ================================================================
+
+  # ---- Frontend (Static Site) ----
+  - type: web
+    name: linkshelf-frontend
+    runtime: static
+    region: oregon
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # ================================================================
+      # BUG #2: VITE_API_URL is NOT set here!
+      # The Vite build needs this at BUILD TIME to bake the API URL
+      # into the frontend bundle. Without it, the app will try to
+      # call "undefined/api/..." which obviously fails.
+      # ================================================================
