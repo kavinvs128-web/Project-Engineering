@@ -1,27 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Chatbot</title>
-    <link rel="stylesheet" href="style.css">
+  <title>AI Chatbot</title>
 </head>
 <body>
-    <div class="chat-container">
-        <header>
-            <h1>AI Chatbot</h1>
-        </header>
 
-        <div id="chatDisplay" class="chat-display">
-            <!-- Messages will appear here -->
-        </div>
+  <h2>AI Chatbot</h2>
 
-        <div class="input-area">
-            <input type="text" id="messageInput" placeholder="Type your message here..." autocomplete="off">
-            <button id="sendBtn">Send</button>
-        </div>
-    </div>
+  <div id="chat"></div>
 
-    <script src="script.js"></script>
+  <input id="input" placeholder="Type message..." />
+  <button onclick="sendMessage()">Send</button>
+
+  <script>
+    const chatDiv = document.getElementById("chat");
+    const input = document.getElementById("input");
+
+    let messages = [];
+
+    function appendMessage(role, content) {
+      const p = document.createElement("p");
+      p.textContent = `${role}: ${content}`;
+      chatDiv.appendChild(p);
+    }
+
+    async function sendMessage() {
+      const userMessage = input.value;
+      if (!userMessage) return;
+
+      messages.push({ role: "user", content: userMessage });
+      appendMessage("You", userMessage);
+
+      input.value = "";
+
+      const res = await fetch("http://localhost:3000/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ messages })
+      });
+
+      const data = await res.json();
+
+      messages.push({ role: "assistant", content: data.reply });
+      appendMessage("AI", data.reply);
+    }
+  </script>
+
 </body>
 </html>

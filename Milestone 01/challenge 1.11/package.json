@@ -11,5 +11,10 @@
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
-  }
+  },
+  "description": "An anonymous confession app for developers to share their bugs, deadline stress, imposter syndrome, and vibe-coding sessions.",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
 }
