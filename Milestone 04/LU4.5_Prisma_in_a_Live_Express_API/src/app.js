@@ -1,4 +1,5 @@
 const express = require('express');
+const prisma = require('./prisma');
 const { getProducts, getProductById } = require('./product.controller');
 const { purchaseItem, getOrdersByUser } = require('./order.controller');
 
